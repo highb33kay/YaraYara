@@ -1,12 +1,13 @@
 # YaraYara TS Node Express: A TypeScript Node Server Setup Script
 
 ## Overview
+YaraYara TS Node Express simplifies the setup process for a TypeScript Node.js server, automating everything from folder structure creation to Swagger documentation and Git initialization.
 
 This script automates the setup process for a TypeScript Node.js server along with its folder structure, dependencies, API routes, Swagger documentation, Git initialization, and server startup.
 
 ## Usage
 
-1. Make sure you have Bash installed on your system.
+1. Clone the Repo https://github.com/highb33kay/YaraYara or copy the Script
 2. Make it executeable by running `chmod +x yara`
 3. Execute the script by running `./yara`.
 4. Watch the Magic as it Unravels ❤️🪄
@@ -17,6 +18,7 @@ This script automates the setup process for a TypeScript Node.js server along wi
 - Creates a folder structure for controllers, database, interfaces, middlewares, routes, services, and utils.
 - Installs necessary dependencies including TypeScript, Express, ts-node-dev, Swagger, and Morgan.
 - Configures Swagger for API documentation.
+- Setup a Greetings Endpoint for test
 - Initializes Git and creates a `.gitignore` file.
 - Starts the development server using `npm run start:dev`.
 
@@ -53,6 +55,12 @@ This script automates the setup process for a TypeScript Node.js server along wi
 1. Edit the `.env` file to configure environment variables.
 2. Run `npm run start:dev` to start the development server.
 3. Visit `http://localhost:3000/api-docs` to view Swagger API documentation.
+
+:star:️ Leave a star, share your suggestions for improvement! :rocket:
+
+## Author
+
+- Ibukun Alesinloye ([highb33kay.me](https://highb33kay.me))
 
 ## License
 
