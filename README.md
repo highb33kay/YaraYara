@@ -5,6 +5,13 @@ YaraYara TS Node Express simplifies the setup process for a TypeScript Node.js s
 
 This script automates the setup process for a TypeScript Node.js server along with its folder structure, dependencies, API routes, Swagger documentation, Git initialization, and server startup.
 
+## Requirements
+
+- Bash
+- Git
+- Node.js
+- npm
+
 ## Usage
 
 1. Clone the Repo `git clone https://github.com/highb33kay/YaraYara.git` or copy the `yara` Script file to your local machine 
