@@ -7,8 +7,8 @@ This script automates the setup process for a TypeScript Node.js server along wi
 ## Usage
 
 1. Make sure you have Bash installed on your system.
-2. Make it executeable by running `chmod +x yara.sh`
-3. Execute the script by running `./yara.sh`.
+2. Make it executeable by running `chmod +x yara`
+3. Execute the script by running `./yara`.
 4. Watch the Magic as it Unravels ❤️🪄
 
 ## Features
