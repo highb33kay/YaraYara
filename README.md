@@ -65,9 +65,10 @@ This script automates the setup process for a TypeScript Node.js server along wi
 
 :star:️ Leave a star, share your suggestions for improvement! :rocket:
 
-## Author
+## Author and Contributors
 
 - Ibukun Alesinloye ([highb33kay](https://github.com/highb33kay/))
+- Oluwaseyi Ogunjuyigbe ([seyiogunjuyigbe](https://github.com/seyiogunjuyigbe))
 
 ## License
 
