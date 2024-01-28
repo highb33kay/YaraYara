@@ -1,6 +1,7 @@
 # YaraYara TS Node Express: A TypeScript Node Server Setup Script
 
 ## Overview
+
 YaraYara TS Node Express simplifies the setup process for a TypeScript Node.js server, automating everything from folder structure creation to Swagger documentation and Git initialization.
 
 This script automates the setup process for a TypeScript Node.js server along with its folder structure, dependencies, API routes, Swagger documentation, Git initialization, and server startup.
@@ -14,10 +15,11 @@ This script automates the setup process for a TypeScript Node.js server along wi
 
 ## Usage
 
-1. Copy the `yara` Script file to your local machine 
-2. Make it executeable by running `chmod +x yara`
+1. Copy the `yara` script file to your local machine.
+2. Make it executable by running `chmod +x yara`.
 3. Execute the script by running `./yara`.
-4. Watch the Magic as it Unravels ❤️🪄
+4. Follow the prompts to configure your project.
+5. Watch the magic as it unfolds! ❤️🪄
 
 ## Features
 
@@ -25,7 +27,7 @@ This script automates the setup process for a TypeScript Node.js server along wi
 - Creates a folder structure for controllers, database, interfaces, middlewares, routes, services, and utils.
 - Installs necessary dependencies including TypeScript, Express, ts-node-dev, Swagger, and Morgan.
 - Configures Swagger for API documentation.
-- Setup a Greetings Endpoint for test
+- Setup a Greetings Endpoint for testing.
 - Initializes Git and creates a `.gitignore` file.
 - Starts the development server using `npm run start:dev`.
 
@@ -62,13 +64,16 @@ This script automates the setup process for a TypeScript Node.js server along wi
 1. Edit the `.env` file to configure environment variables.
 2. Run `npm run start:dev` to start the development server.
 3. Visit `http://localhost:3000/api-docs` to view Swagger API documentation.
+4. Visit `http://localhost:3000/api/v1/greetings` to test the Greetings Endpoint.
+5. Edit the `README.md` file to document your project.
+6. Edit the `package.json` file to add additional project metadata and dependencies.
 
-:star:️ Leave a star, share your suggestions for improvement! :rocket:
+:star: Leave a star, share your suggestions for improvement! :rocket:
 
 ## Author and Contributors
 
 - Ibukun Alesinloye ([highb33kay](https://github.com/highb33kay/))
-- Oluwaseyi Ogunjuyigbe ([seyiogunjuyigbe](https://github.com/seyiogunjuyigbe))
+- Oluwaseyi Ogunjuyigbe ([seyiogunjuyigbe](https://github.com/seyiogunjuyigbe/))
 
 ## License
 

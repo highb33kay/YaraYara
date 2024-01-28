@@ -4,21 +4,96 @@ echo "Starting Yara Yara: A TS Node Express Quick Start Script."
 
 sleep 2
 
-# Prompt for project name
+# pick project folder location
+read -p "Enter project directory location (required): " projectDir
+
+# check if project directory exists
+if [ ! -d "$projectDir" ]; then
+	echo "Project directory does not exist."
+	read -p "Enter project directory location (required): " projectDir
+	else
+	echo "Project directory exists."
+fi
+
+# prompt for creating a new folder or not
+read -p "Do you want to create a new folder for the project or work in the current directory? (y/n): " createFolder
+
+# prompt for project name
 read -p "Enter project name (required): " projectName
+
+# get project description
+read -p "Enter project description (optional): " projectDescription
 
 # Validate project name input
 if [ -z "$projectName" ]; then
     projectName="node-ts-starter" # Fixed the '-' before variable assignment
 fi
 
+# if project description is empty, then set it to default
+if [ -z "$projectDescription" ]; then
+	projectDescription="A Node.js with TypeScript starter project."
+fi
+
+# if createFolder is n, then check if it is empty
+if [ "$createFolder" = "n" ]; then
+	# if the project folder is not empty, then prompt to empty it
+	if [ "$(ls -A "$projectDir")" ]; then
+		read -p "Project directory is not empty. Do you want to empty it? (y/n): " emptyDir
+
+		if [ "$emptyDir" = "y" ]; then
+			rm -rf "$projectDir"/*
+		else
+			echo ""
+			# if the project folder is not empty and user does not want to empty it, then exit
+			read -p "Project directory is not empty. Would you like to continue?(y/n): " exitDir
+			if [ "$exitDir" = "n" ]; then
+				exit 1
+			fi
+		fi
+	fi
+
+	# change directory to project folder
+	cd "$projectDir" || exit
+fi
+
+# if createFolder is y, then create a new folder
+if [ "$createFolder" = "y" ]; then
+
+	# change directory to project folder
+	cd "$projectDir" || exit
+
+	# Convert project name to lowercase with hyphens
+	projectFolder=$(echo "$projectName" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
+
+	# if project folder already exists, then prompt to delete it
+	if [ -d "$projectFolder" ]; then
+		read -p "Project folder already exists. Do you want to delete it? (y/n): " deleteFolder
+
+		if [ "$deleteFolder" = "y" ]; then
+			rm -rf "$projectFolder"
+		else
+			echo "A folder already exist with the same name. Please delete the project folder and run the script again."
+			exit 1
+		fi
+	fi
+
+	# create project folder
+	mkdir "$projectFolder"
+
+	# change directory to project folder
+	cd "$projectFolder" || exit
+fi
+
 # Convert project name to lowercase with hyphens
 projectFolder=$(echo "$projectName" | tr '[:upper:]' '[:lower:]' | tr ' ' '-')
 
-echo "Creating project folder '$projectFolder' and all folder structure.."
+# get the current user name
+USER_NAME=$(whoami)
 
-# Create project folder and its subfolders
-mkdir -p "$projectFolder/src/controllers" "$projectFolder/src/database" "$projectFolder/src/interfaces" "$projectFolder/src/middlewares" "$projectFolder/src/routes" "$projectFolder/src/services" "$projectFolder/src/utils"
+echo "Creating project folder for '$projectName' and all folder structure.."
+
+# Create source folder and its subfolders
+mkdir -p src/controllers src/database src/interfaces src/middlewares src/routes src/services src/utils
 
 sleep 2
 
@@ -26,13 +101,23 @@ echo "Folder structure created successfully."
 
 sleep 2
 
-echo "Creating files in '$projectFolder'.."
+echo "Creating files.."
 
 # Create source files
-touch "$projectFolder/src/controllers/greeting.controller.ts" "$projectFolder/src/database/greeting.model.ts" "$projectFolder/src/routes/greeting.route.ts" "$projectFolder/src/middlewares/index.ts" "$projectFolder/src/services/greeting.service.ts" "$projectFolder/src/utils/helpers.ts" "$projectFolder/src/swagger.ts" "$projectFolder/src/server.ts" "$projectFolder/src/app.ts"
+touch src/controllers/greeting.controller.ts
+touch src/database/greeting.model.ts
+touch src/routes/greeting.route.ts
+touch src/middlewares/index.ts
+touch src/services/greeting.service.ts
+touch src/utils/helpers.ts
+touch src/swagger.ts
+touch src/server.ts
+touch src/app.ts
 
 # Create other files
-touch "$projectFolder/.env" "$projectFolder/.gitignore" "$projectFolder/package.json"
+touch .env
+touch .gitignore
+touch package.json
 
 echo "Files created successfully."
 
@@ -41,17 +126,40 @@ sleep 2
 echo "Adding details to files.."
 
 # Add details to .env file
-echo "PORT=3000" > "$projectFolder/.env"
+echo "PORT=3000" > .env
 
-# Add details to README.md in src directory
-echo "# Source Folder" > "$projectFolder/src/README.md"
-echo "This folder contains the source code for the project." >> "$projectFolder/src/README.md"
-echo "Please refer to individual subfolders for specific details." >> "$projectFolder/src/README.md"
+# add this to package.json
+cat <<EOF > package.json
+{
+  "name": "$projectName",
+  "version": "1.0.0",
+  "description": "$projectDescription",
+  "main": "app.js",
+  "scripts": {
+    "start:dev": "ts-node-dev --respawn --transpile-only ./src/app",
+    "start": "node ./build/app.js"
+  },
+  "keywords": [
+	"node",
+	"typescript"
+  ],
+  "author": "$USER_NAME",
+  "license": "MIT",
+  "dependencies": {
+  },
+  "devDependencies": {
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+} 
+EOF
 
-# Add folder structure to README.md in root directory
-echo "# Node.js with TypeScript Starter
+# add project information to README.md in root directory
+cat <<EOF > README.md
+# $projectName
 
-This is a starter project for Node.js with TypeScript.
+$projectDescription
 
 ## Folder Structure
 
@@ -87,14 +195,14 @@ This is a starter project for Node.js with TypeScript.
 - Run \`npm run start\` to start the production server
 - Visit \`http://localhost:3000/api/v1/greetings\` to see the result
 
-" > "$projectFolder/README.md"
+EOF
 
 # Create index.ts files in each subfolder to export modules
-echo "export * from './greeting.controller';" > "$projectFolder/src/controllers/index.ts"
-echo "export * from './greeting.route';" > "$projectFolder/src/interfaces/index.ts"
-echo "export * from './index';" > "$projectFolder/src/middlewares/index.ts"
-echo "export * from './greeting.service';" > "$projectFolder/src/services/index.ts"
-echo "export * from './helpers';" > "$projectFolder/src/utils/index.ts"
+echo "export * from './greeting.controller';" > src/controllers/index.ts
+echo "export * from './greeting.route';" > src/interfaces/index.ts
+echo "export * from './index';" > src/middlewares/index.ts
+echo "export * from './greeting.service';" > src/services/index.ts
+echo "export * from './helpers';" > src/utils/index.ts
 
 echo "Adding details to files successfully.."
 
@@ -102,39 +210,23 @@ sleep 2
 
 echo "Installing dependencies.."
 
-# Initialize Node.js project
-cd "$projectFolder" || exit
-
 # Create package.json file
-cat <<EOF > "./package.json"
-{
-  "name": "$projectName",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "start:dev": "ts-node-dev --respawn --transpile-only src/server.ts",
-    "start": "node build/server.js"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
-}
-EOF
+# Initialize Node.js project
+npm init -y
 
 # Install TypeScript and type definitions for Node.js
 npm install typescript @types/node --save-dev
 
-# Install ts-node-dev and type definitions for it
+# install ts-node-dev and type definitions for it
 npm install ts-node-dev --save-dev
 
-# Initialize TypeScript project
+# initialize TypeScript project
 npx tsc --init
 
 # rm tsconfig.json
 rm tsconfig.json
 
-# Remove everything from tsconfig.json file and add the following
+# remove everything from tsconfig.json file and add the following
 cat <<EOF > tsconfig.json
 {
   "compilerOptions": {
@@ -148,34 +240,35 @@ cat <<EOF > tsconfig.json
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "sourceMap": true
-    // "typeRoots": ["node_modules/@types
+    // "typeRoots": ["node_modules/@types"],
+    // "types": ["node", "express", "body-parser"]
   }
 }
 EOF
 
-# Install express and type definitions for express
+# install express and type definitions for express
 npm install express @types/express --save
 
-# Install swagger, swagger ui, swagger jsdoc and type definitions for them
+# install swagger, swagger ui, swagger jsdoc and type definitions for them
 npm install swagger-ui-express swagger-jsdoc @types/swagger-ui-express @types/swagger-jsdoc --save
 
-# Install morgan and type definitions for it
+# install morgan and type definitions for it
 npm install morgan @types/morgan --save
 
-# Create swagger.ts file
-touch "./src/swagger.ts"
+# create swagger.ts file
+touch src/swagger.ts
 
-# Add the following to swagger.ts file
-cat <<EOF > "./src/swagger.ts"
+# add the following to swagger.ts file
+cat <<EOF > src/swagger.ts
 import swaggerJsdoc from "swagger-jsdoc";
 
 const options = {
   definition: {
     openapi: "3.1.0",
     info: {
-      title: "Type Script Node Starter API",
+      title: "$projectName API Documentation",
       version: "1.0.0",
-      description: "API for TypeScript API End Point Documentation",
+      description: "API for $projectName API End Point Documentation",
     },
     servers: [
       {
@@ -220,19 +313,19 @@ sleep 2
 
 echo "Setting up greetings API.."
 
-# Create controllers
+# create controllers
 echo "import { Request, Response } from 'express';
 
 export function getGreetings(req: Request, res: Response) {
   res.json({ message: 'Hello World!🌍' });
-}" > "./src/controllers/greeting.controller.ts"
+}" > src/controllers/greeting.controller.ts
 
-# Create services
+# create services
 echo "export async function getAllGreetings() {
   return [];
-}" > "./src/services/greeting.service.ts"
+}" > src/services/greeting.service.ts
 
-# Create routes
+# create routes
 echo "import { Router } from 'express';
 
 /**
@@ -264,11 +357,10 @@ const router = Router();
 
 router.get('/greetings', getGreetings);
 
-module.exports = router;" > "./src/routes/greeting.route.ts"
+module.exports = router;" > src/routes/greeting.route.ts
 
-# Create app.ts file
+# create app.ts file
 echo "import express from 'express';
-require('dotenv').config();
 import { readdirSync } from 'fs';
 import { join } from 'path';
 import morgan from 'morgan';
@@ -277,68 +369,68 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerOptions = require('./swagger');
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = 3000;
 
 app.use(morgan('dev'));
 
-// Swagger UI
+//  Swagger UI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerOptions));
 
 // Dynamically serve all routes
 readdirSync('./src/routes').map((path) => {
-    app.use('/api/v1/', require(\`./routes\${path}\`));
+    app.use('/api/v1/', require(\`./routes/\${path}\`));
 });
 
 app.listen(port, () => {
   console.log(\`Server is running on port \${port}\`);
-});" > "./src/app.ts"
+});" > src/app.ts
 
 echo "Setting up greetings API successfully."
 
 sleep 2
 
-echo "TypeScript Node Server and all folder structure have been created successfully in '$projectFolder'."
-
 echo "Running the server.."
 
-# If the server has git initialized, then push to git
-if [ -d ".//.git" ]; then
-    echo "Git is initialized."
+# if the server has git initialized, then push to git
+if [ -d ".git" ]; then
+	echo "Git is initialized."
 
-    # Check if remote is set
-    if [ -z "$(git -C "./" remote show origin)" ]; then
-        echo "Remote is not set."
-        echo "Please set the remote to sync."
-    fi
+	# check if remote is set
+	if [ -z "$(git remote show origin)" ]; then
+		echo "Remote is not set."
+		echo "Please set the remote to sync."
+	fi
 else
-    echo "Git is not initialized."
-    echo "Initializing git in '$projectFolder'.."
-    git -C "./" init
-    echo "Git initialized successfully in '$projectFolder'."
+	echo "Git is not initialized."
+	echo "Initializing git.."
+	git init
+	echo "Git initialized successfully."
 fi
 
 echo "Adding git ignore.."
 
-# Pull node ts git ignore
-curl https://raw.githubusercontent.com/github/gitignore/master/Node.gitignore --output "$./.gitignore"	
+# pull node ts git ignore
+curl https://raw.githubusercontent.com/github/gitignore/master/Node.gitignore --output .gitignore	
 
 echo "Pushing to git.."
 
-# Push to git
-git -C "./" add .
-git -C "./" commit -m "Initial commit"
+# push to git
+git add .
+git commit -m "Initial commit"
 
-if git -C "./" remote show origin > /dev/null 2>&1; then
-    git -C "./" push
-    echo "Pushed to git successfully."
+if git remote show origin > /dev/null 2>&1; then
+    git push
+	echo "Pushed to git successfully."
 else
     echo "Remote is not set."
     echo "Please set the remote to sync."
 fi
 
+echo "All done 😊. Happy coding"
+
 sleep 2
 
 echo "Running the server.."
 
-# Run the server and check if it works
+# run the server and check if it works
 npm run start:dev
