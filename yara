@@ -4,6 +4,8 @@ echo "Starting Yara Yara: A TS Node Express Quick Start Script."
 
 sleep 2
 
+yaraDirectory=$(pwd)
+
 # pick project folder location
 read -p "Enter project directory location (required): " projectDir
 
@@ -427,6 +429,9 @@ else
 fi
 
 echo "All done 😊. Happy coding"
+
+# clean up yara files and folders
+rm -rf "$yaraDirectory"
 
 sleep 2
 
