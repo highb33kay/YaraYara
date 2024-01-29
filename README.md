@@ -15,7 +15,7 @@ This script automates the setup process for a TypeScript Node.js server along wi
 
 ## Usage
 
-1. Run `curl -X GET https://github.com/highb33kay/YaraYara/blob/main/yara` in your shell.
+1. Run `git clone https://github.com/highb33kay/YaraYara` in your shell or terminal.
 2. Make it executable by running `chmod +x yara`.
 3. Execute the script by running `./yara`.
 4. Follow the prompts to configure your project.
